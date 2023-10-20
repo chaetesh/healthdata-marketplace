@@ -14,6 +14,8 @@ contract healthDataMarket{
         string name;
         string data;
         uint256 cost;
+        // storing user's address
+        address user;
     }
     address public owner;
 
@@ -47,7 +49,8 @@ contract healthDataMarket{
             _name,
             _category,
             _data,
-            _cost
+            _cost,
+            msg.sender
         );
 
         dataItems[_id] = dataitem;
@@ -65,6 +68,11 @@ contract healthDataMarket{
         orderCount[msg.sender]++; 
 
         orders[msg.sender][orderCount[msg.sender]] = order;
+
+        // When buying pay incentive to record owner to get access of it
+        address payable recipient = payable(dataitem.user);
+        recipient.transfer(dataitem.cost);
+
         emit Buy(msg.sender, orderCount[msg.sender], _id);
     }
 
@@ -72,10 +80,11 @@ contract healthDataMarket{
         string memory,
         string memory,
         string memory,
-        uint256 cost)
+        uint256 cost,
+        address user)
         {
             dataItem memory dataitem = dataItems[_id];
-            return(dataitem.category,dataitem.name,dataitem.data,dataitem.cost);
+            return(dataitem.category,dataitem.name,dataitem.data,dataitem.cost,dataitem.user);
         }
 
     function withdraw() public onlyOwner{
