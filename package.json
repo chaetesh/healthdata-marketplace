@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "hardhat": "^2.18.1"
+    "fs": "^0.0.1-security",
+    "hardhat": "^2.18.1",
+    "moralis": "^2.23.1"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",

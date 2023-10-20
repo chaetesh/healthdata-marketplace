@@ -34,9 +34,11 @@ contract healthDataMarket{
     event AddData(string name, uint256 cost, string data);
 
     function addData(
+        // Unique id for each record
         uint256 _id,
         string memory _name,
         string memory _category,
+        // adding the hash we get by uploading the file into IPFS network
         string memory _data,
         uint256 _cost
     )public onlyOwner(){
@@ -64,5 +66,20 @@ contract healthDataMarket{
 
         orders[msg.sender][orderCount[msg.sender]] = order;
         emit Buy(msg.sender, orderCount[msg.sender], _id);
+    }
+
+    function access(uint256 _id) public view returns(
+        string memory,
+        string memory,
+        string memory,
+        uint256 cost)
+        {
+            dataItem memory dataitem = dataItems[_id];
+            return(dataitem.category,dataitem.name,dataitem.data,dataitem.cost);
+        }
+
+    function withdraw() public onlyOwner{
+        (bool success,) = owner.call{value: address(this).balance}("");
+        require(success);
     }
 }
